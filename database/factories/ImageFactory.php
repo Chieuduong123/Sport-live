@@ -14,10 +14,11 @@ class ImageFactory extends Factory
      */
     public function definition()
     {
+        $image = ['aaa.png', 'rrrr.jpg', 'eeee.png', 'qqqq.png'];
         $sports = Sport::pluck('id')->toArray();
         return [
             'sport_id' => $this->faker->randomElement($sports),
-            'image_path' => 'https://placeimg.com/100/100/any?' . rand(1, 100),
+            'image_path' => array_rand(array_flip($image)),
             'title' => $this->faker->text(20),
            
         ];

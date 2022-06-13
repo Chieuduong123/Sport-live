@@ -13,6 +13,14 @@
 
 <body>
     <section class="ftco-section">
+
+        <nav class="navbar navbar-light bg-light justify-content-between">
+            <a class="navbar"></a>
+            <form style="text-align: center" action="{{ route('sports.index') }}" method="GET" class="form-inline">
+                <input class="form-control mr-sm-2" name="search" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </nav>
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-6 text-center mb-4">
@@ -42,41 +50,45 @@
                                         <td>
                                             <div class="email">
                                                 <span>{{ $sport->name }}</span>
-
                                             </div>
                                         </td>
                                         <td>
                                             <div class="email">
                                                 <span>{{ $sport->categories->name }}</span>
-
                                             </div>
                                         </td>
                                         <td>
                                             <div class="img" style="background-image:"></div>
-                                            <img src="{{ $sport->image_path }}">
+                                            <a href="{{ route('detail', $sport->id) }}">
+                                                <img src="{{ asset('images/' . $sport->image_path) }}"
+                                                    style="width:100px;height:80px;">
+                                            </a>
                                         </td>
                                         <td>{{ $sport->prices->price }}</td>
                                         <td>
                                             <div class="email">
                                                 <span>{{ $sport->describe }}</span>
-
                                             </div>
                                         </td>
                                         <td>
                                             <div class="email">
                                                 <span>{{ $sport->updated_at }}</span>
-
                                             </div>
                                         </td>
                                         <td>
-                                            <a class="btn btn-primary">EDIT</a>
+                                            <a class="btn btn-primary"
+                                                href="{{ route('sports.edit', $sport->id) }}">EDIT</a>
                                         </td>
                                         <td>
-                                            <a class="btn btn-danger" href="">DELETE</a>
+                                            <a class="btn btn-danger" onclick="return confirm('Are you sure?')"
+                                                href="{{ route('sports.destroy', $sport->id) }}">DELETE</a>
                                         </td>
                                     </tr>
                                 @endforeach
                             </tbody>
+                            <td>
+                                <a class="btn btn-primary" href="add-sport">ADD SPORT</a>
+                            </td>
                         </table>
                         <div class="d-flex justify-content-center">
                             {{ $sports->links('pagination::bootstrap-4') }}

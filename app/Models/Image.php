@@ -12,10 +12,11 @@ class Image extends Model
         'sport_id',
         'image_path',
         'title',
-        
+
     ];
 
-    public function sport(){
-        return $this->hasOne(Sport::class, 'sport_id');
+    public function sports()
+    {
+        return $this->belongsTo(Sport::class);
     }
 }
