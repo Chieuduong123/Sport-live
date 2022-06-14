@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SportRequests;
 use App\Models\Category;
 use App\Models\Image;
 use App\Models\Price;
 use App\Models\Sport;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class SportController extends Controller
 {
@@ -35,7 +37,7 @@ class SportController extends Controller
         return view('add-sport')->with(compact('prices', 'categories'));
     }
 
-    public function create(Request $request)
+    public function create(SportRequests $request)
     {
         if ($request->hasFile("image_path")) {
             $image_path  = '';
@@ -71,6 +73,7 @@ class SportController extends Controller
 
     function generateUUID()
     {
+        // $uuid = Str::uuid()->toString();
         $uuid =  mt_rand(1, 10);
         return $uuid;
     }
@@ -112,7 +115,7 @@ class SportController extends Controller
     public function showDetail($id)
     {
         $sport = Sport::findOrFail($id);
-        $sports = Sport::with(['categories', 'prices', 'images'])->get();
-        return view('detail-sport', compact('sport', 'sports'));
+        $images = Image::where('sport_id', '=', $id)->get();
+        return view('detail-sport', compact('sport', 'images'));
     }
 }

@@ -31,13 +31,13 @@
                 <div class="col-md-12">
                     <h3 class="h5 mb-4 text-center">Table Sport</h3>
                     <div class="table-wrap">
-                        <table class="table">
+                        <table class="table" id="myTable2">
                             <thead class="thead-primary">
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Category</th>
+                                    <th onclick="sortTable(0)">Name</th>
+                                    <th onclick="sortTable(1)">Category</th>
                                     <th>Image</th>
-                                    <th>Price</th>
+                                    <th onclick="sortTable(2)">Price</th>
                                     <th>Description</th>
                                     <th>Date Update</th>
                                     <th>Action</th>
@@ -86,10 +86,10 @@
                                     </tr>
                                 @endforeach
                             </tbody>
-                            <td>
-                                <a class="btn btn-primary" href="add-sport">ADD SPORT</a>
-                            </td>
                         </table>
+                        <td>
+                            <a class="btn btn-primary" href="add-sport">ADD SPORT</a>
+                        </td>
                         <div class="d-flex justify-content-center">
                             {{ $sports->links('pagination::bootstrap-4') }}
                         </div>
@@ -105,5 +105,43 @@
     <script src="{{ asset('js/main.js') }}"></script>
 
 </body>
+<script>
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("myTable2");
+        switching = true;
+        dir = "asc";
+        while (switching) {
+            switching = false;
+            rows = table.rows;
+            for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {                       
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {   
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount++;
+            } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
+</script>
 
 </html>

@@ -25,6 +25,7 @@
         <div class="form-group">
             <label for="exampleFormControlInput1">Sport Name</label>
             <input type="text" name="name" class="form-control" id="exampleFormControlInput1" placeholder="name">
+            <span style="color: red;" class="error-message">{{ $errors->first('name') }}</span></p>
         </div>
         <div class="form-group">
             <label for="exampleFormControlSelect1">ID Category</label>
@@ -38,6 +39,7 @@
             <label for="hinhanh">Image</label>
             <input type="file" name="image_path" id="hinhanh" class="form-control-file "
                 style="border: 1px solid rgb(187, 179, 179);">
+                <span style="color: red;" class="error-message">{{ $errors->first('image_path') }}</span></p>
         </div>
         <div class="form-group">
             <label for="exampleFormControlSelect1">ID Price</label>
@@ -50,11 +52,13 @@
         <div class="form-group">
             <label for="exampleFormControlTextarea1">Describe</label>
             <textarea class="form-control" name="describe" id="exampleFormControlTextarea1" rows="3"></textarea>
+            <span style="color: red;" class="error-message">{{ $errors->first('describe') }}</span></p>
         </div>
         <div class="form-group">
             <label for="hinhanh">Image</label>
             <input type="file" name="images[]" id="hinhanh" class="form-control-file "
                 style="border: 1px solid rgb(187, 179, 179);" multiple>
+                <span style="color: red;" class="error-message">{{ $errors->first('images[]') }}</span></p>
         </div>
         <button type="submit" class="btn btn-success " style="font-size: 18;padding: 5px;"> ADD </button>
     </form>
