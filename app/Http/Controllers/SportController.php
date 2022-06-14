@@ -83,10 +83,11 @@ class SportController extends Controller
         $sport = Sport::findOrFail($id);
         $prices = Price::all();
         $categories = Category::all();
-        return view('edit-sport')->with(compact('prices', 'categories', 'sport'));
+        $images = Image::where('sport_id', '=', $id)->get();
+        return view('edit-sport')->with(compact('prices', 'categories', 'sport', 'images'));
     }
 
-    public function update(Request $request, $id)
+    public function update(SportRequests $request, $id)
     {
         $sports = Sport::find($id);
         $sports->name = $request->name;
@@ -102,6 +103,19 @@ class SportController extends Controller
             $sports['image_path'] = $image_name;
         }
         $sports->save();
+
+        if ($request->hasFile("images")) {
+            $files = $request->file("images");
+            foreach ($files as $file) {
+                $imageName = time() . '_' . $file->getClientOriginalName();
+                $image = new Image();
+                $image->sport_id = $sports->id;
+                $image->image_path = $imageName;
+                $image->title = "abc";
+                $file->move(public_path("images"), $imageName);
+                $image->save();
+            }
+        }
         return redirect()->route('sports.index')->with('status', "Update successfully");
     }
 

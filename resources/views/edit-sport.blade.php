@@ -58,6 +58,15 @@
                 id="exampleFormControlTextarea1" rows="3">
                 <span style="color: red;" class="error-message">{{ $errors->first('describe') }}</span></p>
         </div>
+        <div class="form-group">
+            <label for="hinhanh">Image</label>
+            <input type="file" name="images[]" id="hinhanh" class="form-control-file "
+                style="border: 1px solid rgb(187, 179, 179);" multiple>
+                <span style="color: red;" class="error-message">{{ $errors->first('images[]') }}</span></p>
+                @foreach ($images as $image)
+                <img src="{{ asset('images/' . $image->image_path) }}" width=" 300px">
+                @endforeach
+        </div>
         <button type="submit" class="btn btn-success " style="font-size: 18;padding: 5px;"> EDIT </button>
     </form>
 </body>

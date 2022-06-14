@@ -22,7 +22,7 @@
 <body>
     <a class="nav-link " data-toggle="tab" href="#tabs-1" role="tab">
         <div class="product__thumb__pic set-bg">
-            <img src="{{ asset('images/' . $sport->image_path) }}" alt="" style="width: 70%;">
+            <img src="{{ asset('images/' . $sport->image_path) }}" alt="" style="width: 20%;">
         </div>
     </a>
     <h4> {{ $sport->name }} </h4>
