@@ -2,29 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SportRequests;
 use App\Models\Category;
 use App\Models\Image;
 use App\Models\Price;
 use App\Models\Sport;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class SportController extends Controller
 {
     public function index(Request $request)
     {
-        $sports = Sport::with(['categories', 'prices'])->paginate(5);
-
+        $sports = Sport::with(['categories', 'prices']);
         if ($request->input('search')) {
             $search = $request->input('search');
-            $sports =  Sport::where('name', 'like', "%{$search}%")
+            $sports =  $sports->where('name', 'like', "%{$search}%")
                 ->orWhere('updated_at', 'LIKE', "%{$search}%")
                 ->orWhereHas('categories', function (Builder $query) use ($search) {
                     $query->where('name', 'LIKE', "%{$search}%");
-                })->paginate(5);
-            $sports->appends(['search' => $search]);
+                });
         }
-
+        $sports = $sports->sortable()->paginate(5);
         return view('list-sport', compact('sports'));
     }
 
@@ -35,10 +36,9 @@ class SportController extends Controller
         return view('add-sport')->with(compact('prices', 'categories'));
     }
 
-    public function create(Request $request)
+    public function create(SportRequests $request)
     {
         if ($request->hasFile("image_path")) {
-            $image_path  = '';
             $image = $request->file('image_path');
             $image_name = $image->getClientOriginalName();
             $image->move(public_path('images'), $image_name);
@@ -71,6 +71,7 @@ class SportController extends Controller
 
     function generateUUID()
     {
+        // $uuid = Str::uuid()->toString();
         $uuid =  mt_rand(1, 10);
         return $uuid;
     }
@@ -80,10 +81,11 @@ class SportController extends Controller
         $sport = Sport::findOrFail($id);
         $prices = Price::all();
         $categories = Category::all();
-        return view('edit-sport')->with(compact('prices', 'categories', 'sport'));
+        $images = Image::where('sport_id', '=', $id)->get();
+        return view('edit-sport')->with(compact('prices', 'categories', 'sport', 'images'));
     }
 
-    public function update(Request $request, $id)
+    public function update(SportRequests $request, $id)
     {
         $sports = Sport::find($id);
         $sports->name = $request->name;
@@ -92,13 +94,25 @@ class SportController extends Controller
         $sports->price_id = $request->price_id;
         $sports->describe = $request->describe;
         if ($request->hasFile('image_path')) {
-            $image_path  = 'public/image';
             $image = $request->file('image_path');
             $image_name = $image->getClientOriginalName();
-            $path = $request->file('image_path')->storeAs($image_path, $image_name);
+            $image->move(public_path('images'), $image_name);
             $sports['image_path'] = $image_name;
         }
         $sports->save();
+
+        if ($request->hasFile("images")) {
+            $files = $request->file("images");
+            foreach ($files as $file) {
+                $imageName = time() . '_' . $file->getClientOriginalName();
+                $image = new Image();
+                $image->sport_id = $sports->id;
+                $image->image_path = $imageName;
+                $image->title = "abc";
+                $file->move(public_path("images"), $imageName);
+                $image->save();
+            }
+        }
         return redirect()->route('sports.index')->with('status', "Update successfully");
     }
 
@@ -109,10 +123,20 @@ class SportController extends Controller
         return redirect()->back()->with('success', 'Sport removed successfully!');
     }
 
+    public function deleteImage($id)
+    {
+        $images = Image::findOrFail($id);
+        if (File::exists("images/" . $images->image_path)) {
+            File::delete("images/" . $images->image_path);
+        }
+        Image::find($id)->delete();
+        return back();
+    }
+
     public function showDetail($id)
     {
         $sport = Sport::findOrFail($id);
-        $sports = Sport::with(['categories', 'prices', 'images'])->get();
-        return view('detail-sport', compact('sport', 'sports'));
+        $images = Image::where('sport_id', '=', $id)->get();
+        return view('detail-sport', compact('sport', 'images'));
     }
 }
