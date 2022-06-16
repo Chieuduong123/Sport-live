@@ -20,26 +20,21 @@
 </head>
 
 <body>
-
     <a class="nav-link " data-toggle="tab" href="#tabs-1" role="tab">
         <div class="product__thumb__pic set-bg">
-            <img src="{{ asset('images/' . $sport->image_path) }}" alt="" style="width: 70%;">
+            <img src="{{ asset('images/' . $sport->image_path) }}" alt="" style="width: 20%;">
         </div>
     </a>
-
     <h4> {{ $sport->name }} </h4>
     <h3> {{ $sport->categories->name }}</h3>
     <p> {{ $sport->prices->price }}</p>
     <p> {{ $sport->describe }}</p>
     <p> {{ $sport->updated_at }}</p>
-
-    @if (count($sport->images) > 0)
         <p>Images:</p>
-        @foreach ($sport->images as $img)
-            <img src={{ asset('images/' . $img->image_path) }} class="img-responsive"
+        @foreach ($images as $image)
+            <img src={{ asset('images/' . $image->image_path) }} class="img-responsive"
                 style="max-height: 100px; max-width: 100px;" alt="" srcset="">
         @endforeach
-    @endif
 
 </body>
 

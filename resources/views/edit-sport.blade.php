@@ -27,6 +27,7 @@
             <label for="exampleFormControlInput1">Sport Name</label>
             <input type="text" name="name" value="{{ $sport->name }}" class="form-control"
                 id="exampleFormControlInput1" placeholder="name">
+                <span style="color: red;" class="error-message">{{ $errors->first('name') }}</span></p>
         </div>
         <div class="form-group">
             <label for="exampleFormControlSelect1">ID Category</label>
@@ -40,6 +41,7 @@
             <label for="hinhanh">Image</label>
             <input type="file" value="{{ $sport->image_path }}" name="image_path" id="hinhanh"
                 class="form-control-file " style="border: 1px solid rgb(187, 179, 179);">
+                <span style="color: red;" class="error-message">{{ $errors->first('image_path') }}</span></p>
             <img src="{{ asset('images/' . $sport->image_path) }}" width=" 300px">
         </div>
         <div class="form-group">
@@ -54,6 +56,16 @@
             <label for="exampleFormControlTextarea1">Describe</label>
             <input class="form-control" name="describe" value="{{ $sport->describe }}"
                 id="exampleFormControlTextarea1" rows="3">
+                <span style="color: red;" class="error-message">{{ $errors->first('describe') }}</span></p>
+        </div>
+        <div class="form-group">
+            <label for="hinhanh">Image</label>
+            <input type="file" name="images[]" id="hinhanh" class="form-control-file "
+                style="border: 1px solid rgb(187, 179, 179);" multiple>
+                <span style="color: red;" class="error-message">{{ $errors->first('images[]') }}</span></p>
+                @foreach ($images as $image)
+                <img src="{{ asset('images/' . $image->image_path) }}" width=" 300px">
+                @endforeach
         </div>
         <button type="submit" class="btn btn-success " style="font-size: 18;padding: 5px;"> EDIT </button>
     </form>
