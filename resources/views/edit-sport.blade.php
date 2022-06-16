@@ -5,69 +5,89 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-    </script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-    </script>
+    <title>EDIT SPORT</title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 </head>
 
 <body>
-    <form style="width: 1000px" action="{{ url('sports-update', $sport->id) }}" method="POST"
+    <form class="form-horizontal" action="{{ url('sports-update', $sport->id) }}" method="POST"
         enctype="multipart/form-data">
         {{ csrf_field() }}
-        <div class="form-group">
-            <label for="exampleFormControlInput1">Sport Name</label>
-            <input type="text" name="name" value="{{ $sport->name }}" class="form-control"
-                id="exampleFormControlInput1" placeholder="name">
-                <span style="color: red;" class="error-message">{{ $errors->first('name') }}</span></p>
-        </div>
-        <div class="form-group">
-            <label for="exampleFormControlSelect1">ID Category</label>
-            <select class="form-control" name="category_id" id="exampleFormControlSelect1">
-                @foreach ($categories as $category)
-                    <option value="{{ $category->id }}">{{ $category->id }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="hinhanh">Image</label>
-            <input type="file" value="{{ $sport->image_path }}" name="image_path" id="hinhanh"
-                class="form-control-file " style="border: 1px solid rgb(187, 179, 179);">
-                <span style="color: red;" class="error-message">{{ $errors->first('image_path') }}</span></p>
-            <img src="{{ asset('images/' . $sport->image_path) }}" width=" 300px">
-        </div>
-        <div class="form-group">
-            <label for="exampleFormControlSelect1">ID Price</label>
-            <select class="form-control" name="price_id" id="exampleFormControlSelect1">
-                @foreach ($prices as $price)
-                    <option value="{{ $price->id }}">{{ $price->price }}</option>
-                @endforeach
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="exampleFormControlTextarea1">Describe</label>
-            <input class="form-control" name="describe" value="{{ $sport->describe }}"
-                id="exampleFormControlTextarea1" rows="3">
-                <span style="color: red;" class="error-message">{{ $errors->first('describe') }}</span></p>
-        </div>
-        <div class="form-group">
-            <label for="hinhanh">Image</label>
-            <input type="file" name="images[]" id="hinhanh" class="form-control-file "
-                style="border: 1px solid rgb(187, 179, 179);" multiple>
-                <span style="color: red;" class="error-message">{{ $errors->first('images[]') }}</span></p>
-                @foreach ($images as $image)
-                <img src="{{ asset('images/' . $image->image_path) }}" width=" 300px">
-                @endforeach
-        </div>
-        <button type="submit" class="btn btn-success " style="font-size: 18;padding: 5px;"> EDIT </button>
+        <fieldset>
+            <legend style="text-align: center; color: blueviolet"><strong>EDIT SPORTS</strong></legend>
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="product_name">SPORT NAME</label>
+                <div class="col-md-4">
+                    <input id="product_name" name="name" value="{{ $sport->name }}" placeholder="SPORT NAME"
+                        class="form-control input-md" type="text">
+                    <span style="color: red;" class="error-message">{{ $errors->first('name') }}</span></p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="product_categorie">SPORT CATEGORY</label>
+                <div class="col-md-4">
+                    <select id="product_categorie" name="category_id" class="form-control">
+                        @foreach ($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="filebutton">MAIN IMAGE</label>
+                <div class="col-md-4">
+                    <input value="{{ $sport->image_path }}" name="image_path" id="filebutton" class="input-file"
+                        type="file">
+                    <span style="color: red;" class="error-message">{{ $errors->first('image_path') }}</span></p>
+                    <img src="{{ asset('images/' . $sport->image_path) }}" width=" 300px">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="product_categorie">SPORT PRICE</label>
+                <div class="col-md-4">
+                    <select id="product_categorie" name="price_id" class="form-control">
+                        @foreach ($prices as $price)
+                            <option value="{{ $price->id }}">{{ $price->price }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="product_description">SPORT DESCRIBE</label>
+                <div class="col-md-4">
+                    <textarea class="form-control" id="product_description" name="describe">{{ $sport->describe }}</textarea>
+                    <span style="color: red;" class="error-message">{{ $errors->first('describe') }}</span></p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="filebutton">IMAGE ITEMS</label>
+                <div class="col-md-4">
+                    <input id="filebutton" name="images[]" class="input-file" type="file" multiple>
+                    <span style="color: red;" class="error-message">{{ $errors->first('images[]') }}</span></p>
+                    @foreach ($images as $image)
+                        <form action="/deleteimage/{{ $image->id }}" method="post" enctype="multipart/form-data">
+                            <button class="btn text-danger">X</button>
+                            @csrf
+                        </form>
+                        <img src="{{ asset('images/' . $image->image_path) }}" width=" 300px">
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-4 control-label" for="singlebutton"></label>
+                <div class="col-md-4">
+                    <button id="singlebutton" name="singlebutton" class="btn btn-primary">EDIT</button>
+                </div>
+            </div>
+        </fieldset>
     </form>
 </body>
 

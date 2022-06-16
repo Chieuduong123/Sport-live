@@ -2,40 +2,59 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-    </script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-    </script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Detail</title>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/css.css') }}">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
 </head>
 
 <body>
-    <a class="nav-link " data-toggle="tab" href="#tabs-1" role="tab">
-        <div class="product__thumb__pic set-bg">
-            <img src="{{ asset('images/' . $sport->image_path) }}" alt="" style="width: 20%;">
-        </div>
-    </a>
-    <h4> {{ $sport->name }} </h4>
-    <h3> {{ $sport->categories->name }}</h3>
-    <p> {{ $sport->prices->price }}</p>
-    <p> {{ $sport->describe }}</p>
-    <p> {{ $sport->updated_at }}</p>
-        <p>Images:</p>
-        @foreach ($images as $image)
-            <img src={{ asset('images/' . $image->image_path) }} class="img-responsive"
-                style="max-height: 100px; max-width: 100px;" alt="" srcset="">
-        @endforeach
+    <div class="container">
+        <div class="card">
+            <div class="container-fliud">
+                <div class="wrapper row">
+                    <div class="preview col-md-6">
 
+                        <div class="preview-pic tab-content">
+                            <div class="tab-pane active" id="pic-1">
+                                <img src="{{ asset('images/' . $sport->image_path) }}" />
+                            </div>
+                        </div>
+
+                        <ul class="preview-thumbnail nav nav-tabs">
+                            @foreach ($images as $image)
+                                <li class="active"><a data-target="#pic-1" data-toggle="tab">
+                                        <img src="{{ asset('images/' . $image->image_path) }}" />
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+
+                    </div>
+                    <div class="details col-md-6">
+                        <h3 class="product-title">{{ $sport->name }}</h3>
+                        <p class="product-description">{{ $sport->describe }}</p>
+                        <h4 class="price">current price: <span>${{ $sport->prices->price }}</span></h4>
+                        <p class="vote"><strong>Category Name: </strong> {{ $sport->categories->name }}</p>
+                        <br>
+                        <h5 class="">Update Date: {{ $sport->updated_at }} </h5><br><br>
+                        <div class="action">
+                            <button class="add-to-cart btn btn-default" type="button">add to cart</button>
+                            <button class="like btn btn-default" type="button">
+                                <span class="fa fa-heart"></span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

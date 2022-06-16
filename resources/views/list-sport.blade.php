@@ -1,147 +1,87 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>List Sport</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>List Sports</title>
 
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('css/css1.css') }}">
 </head>
 
 <body>
-    <section class="ftco-section">
+    <div class="container">
 
-        <nav class="navbar navbar-light bg-light justify-content-between">
-            <a class="navbar"></a>
-            <form style="text-align: center" action="{{ route('sports.index') }}" method="GET" class="form-inline">
-                <input class="form-control mr-sm-2" name="search" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-        </nav>
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-6 text-center mb-4">
-                    <h2 class="heading-section">List Sport</h2>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <h3 class="h5 mb-4 text-center">Table Sport</h3>
-                    <div class="table-wrap">
-                        <table class="table" id="myTable2">
-                            <thead class="thead-primary">
-                                <tr>
-                                    <th onclick="sortTable(0)">Name</th>
-                                    <th onclick="sortTable(1)">Category</th>
-                                    <th>Image</th>
-                                    <th onclick="sortTable(2)">Price</th>
-                                    <th>Description</th>
-                                    <th>Date Update</th>
-                                    <th>Action</th>
-                                    <th>&nbsp;</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($sports as $sport)
-                                    <tr class="alert" role="alert">
-                                        <td>
-                                            <div class="email">
-                                                <span>{{ $sport->name }}</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="email">
-                                                <span>{{ $sport->categories->name }}</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="img" style="background-image:"></div>
-                                            <a href="{{ route('detail', $sport->id) }}">
-                                                <img src="{{ asset('images/' . $sport->image_path) }}"
-                                                    style="width:100px;height:80px;">
-                                            </a>
-                                        </td>
-                                        <td>{{ $sport->prices->price }}</td>
-                                        <td>
-                                            <div class="email">
-                                                <span>{{ $sport->describe }}</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="email">
-                                                <span>{{ $sport->updated_at }}</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <a class="btn btn-primary"
-                                                href="{{ route('sports.edit', $sport->id) }}">EDIT</a>
-                                        </td>
-                                        <td>
-                                            <a class="btn btn-danger" onclick="return confirm('Are you sure?')"
-                                                href="{{ route('sports.destroy', $sport->id) }}">DELETE</a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                        <td>
-                            <a class="btn btn-primary" href="add-sport">ADD SPORT</a>
-                        </td>
-                        <div class="d-flex justify-content-center">
-                            {{ $sports->links('pagination::bootstrap-4') }}
-                        </div>
-                    </div>
-                </div>
+        <div class="row">
+            <div class="">
+                <h1 style="text-align: center; color: blueviolet"><strong>SPORTS</strong></h1>
             </div>
         </div>
-    </section>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-3">
+                <form action="{{ route('sports.index') }}" method="GET" class="search-form">
+                    <div class="form-group has-feedback">
+                        <label for="search" class="sr-only">Search</label>
+                        <input type="text" class="form-control" name="search" id="search" placeholder="search">
+                        <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-    <script src="{{ asset('js/jquery.min.js') }}"></script>
-    <script src="{{ asset('js/popper.js') }}"></script>
-    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('js/main.js') }}"></script>
+        <div class="row col-md-12  custyle">
+            <table class="table table-striped custab">
+                <thead>
+                    <a href="add-sport" class="btn btn-primary btn-xs pull-right"><b>+</b> Add new sport</a>
+                    <tr>
+                        <th>
+                            @sortablelink('name', 'Name')</th>
+                        <th>@sortablelink('category_id', 'Category')</th>
+                        <th>Image</th>
+                        <th>@sortablelink('price_id', 'Price')</th>
+                        <th>@sortablelink('describe', 'Describe')</th>
+                        <th>@sortablelink('updated_at', 'Date Update')</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                @foreach ($sports as $sport)
+                    <tr>
+                        <td>{{ $sport->name }}</td>
+                        <td>{{ $sport->categories->name }}</td>
+                        <td>
+                            <div class="img" style="background-image:"></div>
+                            <a href="{{ route('detail', $sport->id) }}">
+                                <img src="{{ asset('images/' . $sport->image_path) }}"
+                                    style="width:100px;height:80px;">
+                            </a>
+                        </td>
+                        <td>{{ $sport->prices->price }}</td>
+                        <td>{{ $sport->describe }}</td>
+                        <td>{{ $sport->updated_at }}</td>
+                        <td class="text-center"><a class='btn btn-info btn-xs'
+                                href="{{ route('sports.edit', $sport->id) }}"><span
+                                    class="glyphicon glyphicon-edit"></span> Edit</a> <a
+                                onclick="return confirm('Are you sure?')"
+                                href="{{ route('sports.destroy', $sport->id) }}" class="btn btn-danger btn-xs"><span
+                                    class="glyphicon glyphicon-remove"></span> Del</a>
+                        </td>
+                    </tr>
+                @endforeach
+                <tr>
+                    <td colspan="10" align="center">
+                        {{ $sports->appends(request()->except('page'))->links('pagination::bootstrap-4') }}</td>
+                </tr>
 
+            </table>
+        </div>
+    </div>
 </body>
-<script>
-    function sortTable(n) {
-        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-        table = document.getElementById("myTable2");
-        switching = true;
-        dir = "asc";
-        while (switching) {
-            switching = false;
-            rows = table.rows;
-            for (i = 1; i < (rows.length - 1); i++) {
-                shouldSwitch = false;
-                x = rows[i].getElementsByTagName("TD")[n];
-                y = rows[i + 1].getElementsByTagName("TD")[n];
-                if (dir == "asc") {
-                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                        shouldSwitch = true;
-                        break;
-                    }
-                } else if (dir == "desc") {
-                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {                       
-                        shouldSwitch = true;
-                        break;
-                    }
-                }
-            }
-            if (shouldSwitch) {   
-                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                switching = true;
-                switchcount++;
-            } else {
-                if (switchcount == 0 && dir == "asc") {
-                    dir = "desc";
-                    switching = true;
-                }
-            }
-        }
-    }
-</script>
 
 </html>
