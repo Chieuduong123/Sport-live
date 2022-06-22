@@ -22,8 +22,12 @@ class UserController extends Controller
         $email = $request['email'];
         $password = $request['password'];
 
-        if (Auth::attempt(['email' => $email, 'password' => $password])) {
-            return (Auth::user()->role == 1) ? redirect('sport') : redirect('/');
+        if (Auth::attempt(['email' => $email, 'password' => $password, 'role' => 1])) {
+            return redirect('admin-sport');
+        } elseif (Auth::attempt(['email' => $email, 'password' => $password, 'role' => 2])) {
+            return redirect('manager-sport');
+        } elseif (Auth::attempt(['email' => $email, 'password' => $password, 'role' => 3])) {
+            return redirect('sport-index');
         } else {
             Session::flash('error', 'Email or password wrong');
             return redirect('/login');
@@ -40,7 +44,9 @@ class UserController extends Controller
         $data = [
             'name' => $request['name'],
             'email' => $request['email'],
+            'role' => $request['role'],
             'password' => bcrypt($request['password']),
+            'password_confirmation' => $request['password_confirmation'],
         ];
         $user = User::create($data);
         $user->setRememberToken(Str::random(60));
@@ -53,5 +59,11 @@ class UserController extends Controller
             Session::flash('error', 'Register Fail!');
             return redirect('/register');
         }
+    }
+
+    public function getLogout()
+    {
+        Auth::logout();
+        return redirect('/login');
     }
 }
