@@ -24,9 +24,10 @@ class RegisterRequests extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
-            'email' => 'required',
-            'password' => 'required|min:6'
+            'name' => 'required|unique:users,name',
+            'email' => 'required|unique:users,email',
+            'password' => ['required','min:6','regex:/^.*(?=.{3,})(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[\d\x])(?=.*[!$#%]).*$/'],
+            'password_confirmation' => 'required|same:password',
         ];
     }
 
@@ -40,9 +41,14 @@ class RegisterRequests extends FormRequest
 
         return [
             'name.required' => 'Name là trường bắt buộc',
+            'name.unique' => 'Name này đã tồn tại',
+            'email.required' => 'Email là trường bắt buộc',
+            'email.unique' => 'Email này đã tồn tại',
             'password.required' => 'Mật khẩu là trường bắt buộc',
             'password.min' => 'Mật khẩu phải chứa ít nhất 6 ký tự',
-
+            'password.regex' => 'Mật khẩu phải chứa ít nhất 1 chữ Hoa, chữ số và kí tự đặc biệt',
+            'password_confirmation.required' => 'Password Confirm là trường bắt buộc',
+            'password_confirmation.same' => 'Password không trùng khớp',
         ];
     }
 }
