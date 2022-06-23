@@ -2,17 +2,14 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>ADD SPORT</title>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    @extends('layout.head')
+
 </head>
 
 <body>
-    <form class="form-horizontal" action="{{ route('manager-sports-create') }}" method="POST" enctype="multipart/form-data">
+    <form class="form-horizontal" action="{{ route('manager-sports-create') }}" method="POST"
+        enctype="multipart/form-data">
         {{ csrf_field() }}
         <fieldset>
             <!-- Form Name -->
@@ -33,7 +30,7 @@
             <div class="form-group">
                 <label class="col-md-4 control-label" for="product_categorie">SPORT CATEGORY</label>
                 <div class="col-md-4">
-                    <select id="product_categorie" name="category_id" class="form-control">
+                    <select style="height: 35px" id="product_categorie" name="category_id" class="form-control">
                         @foreach ($categories as $category)
                             <option value="{{ $category->id }}"
                                 {{ old('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}
@@ -55,7 +52,7 @@
             <div class="form-group">
                 <label class="col-md-4 control-label" for="product_categorie">SPORT PRICE</label>
                 <div class="col-md-4">
-                    <select id="product_categorie" name="price_id" class="form-control">
+                    <select style="height: 35px" id="product_categorie" name="price_id" class="form-control">
                         @foreach ($prices as $price)
                             <option value="{{ $price->id }}" {{ old('price_id') == $price->id ? 'selected' : '' }}>
                                 {{ $price->price }}</option>
@@ -67,7 +64,7 @@
             <div class="form-group">
                 <label class="col-md-4 control-label" for="product_description">SPORT DESCRIBE</label>
                 <div class="col-md-4">
-                    <textarea class="form-control" id="product_description" name="describe" value="{{ old('describe') }}"></textarea>
+                    <textarea class="form-control" id="product_description" name="describe">{{ old('describe') ? old('describe') : $sport->describe }}</textarea>
                     <span style="color: red;" class="error-message">{{ $errors->first('describe') }}</span></p>
                 </div>
             </div>

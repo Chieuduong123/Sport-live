@@ -22,11 +22,11 @@ class UserController extends Controller
         $email = $request['email'];
         $password = $request['password'];
 
-        if (Auth::attempt(['email' => $email, 'password' => $password, 'role' => 1])) {
+        if (Auth::attempt(['email' => $email, 'password' => $password, 'role' => User::ADMIN])) {
             return redirect('admin-sport');
-        } elseif (Auth::attempt(['email' => $email, 'password' => $password, 'role' => 2])) {
+        } elseif (Auth::attempt(['email' => $email, 'password' => $password, 'role' => User::MANAGER])) {
             return redirect('manager-sport');
-        } elseif (Auth::attempt(['email' => $email, 'password' => $password, 'role' => 3])) {
+        } elseif (Auth::attempt(['email' => $email, 'password' => $password, 'role' => User::USER])) {
             return redirect('sport-index');
         } else {
             Session::flash('error', 'Email or password wrong');

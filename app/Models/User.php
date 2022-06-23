@@ -11,6 +11,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    const ADMIN = '1';
+    const MANAGER = '2';
+    const USER = '3';
     /**
      * The attributes that are mass assignable.
      *
@@ -22,6 +25,11 @@ class User extends Authenticatable
         'password',
         'role',
     ];
+
+    public function sports()
+    {
+        return $this->hasMany(Sport::class, 'id', 'user_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
