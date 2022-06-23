@@ -43,18 +43,19 @@ class SportManagerController extends Controller
     {
         if ($request->hasFile("image_path")) {
             $image = $request->file('image_path');
-            $image_name = $image->getClientOriginalName();
-            $image->move(public_path('images'), $image_name);
+            $imageName = $image->getClientOriginalName();
+            $image->move(public_path('images'), $imageName);
 
             $sport = new Sport();
-            $sport->user_id = Auth::user()->id;
-            $sport->name = $request->input('name');
-            $sport->category_id = $request->input('category_id');
-            $sport->image_path = $image_name;
-            $sport->price_id = $request->input('price_id');
-            $sport->describe = $request->input('describe');
-            $uuid = $this->generateUUID();
-            $sport->uuid = $uuid;
+            $sport->fill([
+                'user_id' => Auth::user()->id,
+                'name' => $request->name,
+                'category_id' => $request->category_id,
+                'image_path' => $imageName,
+                'price_id' => $request->price_id,
+                'describe' => $request->describe,
+                'uuid' => $this->generateUUID()
+            ]);
             $sport->save();
         }
 
@@ -63,9 +64,11 @@ class SportManagerController extends Controller
             foreach ($files as $file) {
                 $imageName = time() . '_' . $file->getClientOriginalName();
                 $image = new Image();
-                $image->sport_id = $sport->id;
-                $image->image_path = $imageName;
-                $image->title = "abc";
+                $image->fill([
+                    'sport_id' => $sport->id,
+                    'image_path' => $imageName,
+                    'title' => "abc",
+                ]);
                 $file->move(public_path("images"), $imageName);
                 $image->save();
             }
@@ -82,7 +85,7 @@ class SportManagerController extends Controller
 
     public function edit($id)
     {
-        $sport = Sport::findOrFail($id);
+        $sport = Sport::find($id);
         $prices = Price::all();
         $categories = Category::all();
         $images = Image::where('sport_id', '=', $id)->get();
@@ -92,35 +95,43 @@ class SportManagerController extends Controller
     public function update(UpdateSportRequests $request, $id)
     {
         $sports = Sport::find($id);
-        $sports->user_id = Auth::user()->id;
-        $sports->name = $request->name;
-        $sports->category_id = $request->category_id;
-        $sports->price_id = $request->price_id;
-        $sports->describe = $request->describe;
-        if ($request->hasFile('image_path')) {
-            if (File::exists("image_path/" . $sports->image_path)) {
-                File::delete("image_path/" . $sports->image_path);
-            }
-            $image = $request->file('image_path');
-            $image_name = $image->getClientOriginalName();
-            $image->move(public_path('images'), $image_name);
-            $sports['image_path'] = $image_name;
-        }
-        $sports->save();
+        $sports->fill([
+            'user_id' => Auth::user()->id,
+            'name' => $request->name,
+            'category_id' => $request->category_id,
+            'price_id' => $request->price_id,
+            'describe' => $request->describe,
+        ]);
 
+        if ($request->hasFile('image_path')) {
+            $image = $request->file('image_path');
+            $imageName = $image->getClientOriginalName();
+            $image->move(public_path('images'), $imageName);
+            $sports['image_path'] = $imageName;
+        }
+
+        $sports->save();
+        $this->updateImageItem($request, $id);
+        return redirect()->route('manager.sports.index')->with('status', "Update successfully");
+    }
+
+    public function updateImageItem(UpdateSportRequests $request, $id)
+    {
+        $sports = Sport::find($id);
         if ($request->hasFile("images")) {
             $files = $request->file("images");
             foreach ($files as $file) {
                 $imageName = time() . '_' . $file->getClientOriginalName();
                 $image = new Image();
-                $image->sport_id = $sports->id;
-                $image->image_path = $imageName;
-                $image->title = "abc";
+                $image->fill([
+                    'sport_id' => $sports->id,
+                    'image_path' => $imageName,
+                    'title' => "abc",
+                ]);
                 $file->move(public_path("images"), $imageName);
                 $image->save();
             }
         }
-        return redirect()->route('manager.sports.index')->with('status', "Update successfully");
     }
 
     public function destroy($id)
